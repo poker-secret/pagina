@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>chat SENATI - V SEMESTRE</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="jquery/jquery-ui.js"></script>
+	<link rel="stylesheet" href="jquery/jquery-ui.css">
+	<script>
+		$(function(){
+			$("#tabs").tabs();
+			$("#btnEnviarMensaje").button();
+			$("#btnActualizarMensaje").button();
+			$("#PantallaMensajes").css("height", screen.height-400)
+
+			
+			 
+			 //end listar los mensajes del chat
+
+			 // Enviar Mensaje
+			 $('#btnEnviarMensaje').on("click", function(){
+			 		var vMensaje = $('#txtMensaje').val();
+			 		$.ajax({
+			 			url:'/enviarMensaje?mensaje='+vMensaje
+			 		}).done(function(data){
+			 			$('#txtMensaje').val('');
+
+			 		})
+
+			 })
+			 //Actualizar MENSAJE
+			 $('#btnActualizarMensaje').on("click", function(){
+			 	$.ajax({
+
+				 		//listar los mensajes del chat.
+				 	url:'/listarMensajes',
+
+				 }).done(function(data){
+				 	$('#PantallaMensajes').html('');
+				 	$.each(data, function(index, valor){
+				 		$('#PantallaMensajes').append('<div style="height:50px;white:99%; background-color:#eaf5fe;border: 1px solid #2e6e9e;padding: 5px;border-radius: 3px;"><span style="font-size: 14px;color: #2a6e9e;">'+valor[1]+'</span><br/><span>'+valor[0]+'</span></div><br/>')
+				 	})
+				 	$('#PantallaMensajes').scrollTop(1000000)
+				 })
+
+			 });
+
+
+			 //Actualizar en automatico
+			 //setInterval(function(){
+			 	//$('#btnActualizarMensaje').click()
+			 //},5000)
+			 	
+		}
+		);
+	</script>
+</head>
+<body>
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1"> chat Grupal </a></li>
+		</ul>
+		<div id="tabs-1">
+			<div id="PantallaMensajes" style="padding:10px;border: 1px
+			 solid #e8ece8;float: right;width: 100%;overflow: auto;">
+				
+			</div>
+			<div>
+				<label for="CifradoPuntoAPunto">Cifrar Punto a Punto
+					<input type="checkbox" name="CifradoPuntoAPunto" id="chkCifrado">
+				</label>
+			<div>
+				<textarea id="txtMensaje" style="width:100%" cols="100%" rows="5"></textarea>
+			</div>
+			</div>
+			<br/>
+			<div>
+				<button id="btnEnviarMensaje">Enviar Mensaje</button>
+				<button id="btnActualizarMensaje">Actualizar</button>
+			</div>
+			
+		</div>
+	</div>
+
+</body>
+</html>

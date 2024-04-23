@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio de Sesión</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
+    <link rel="stylesheet" href="jquery/jquery-ui.css">
+    <script type="text/javascript">
+        $(function(){
+            $("#tabLogin").tabs();
+            $("#btnIniciarSesion").on("click", function(){
+                var vusuario = $('#txtusuario').val();
+                var vclave = $('#txtclave').val();
+
+                // Validación de campos no vacíos
+                if (vusuario.trim() === '' || vclave.trim() === '') {
+                    alert("Por favor ingrese nombre de usuario y contraseña.");
+                    return;
+                }
+
+                // Enviar datos al servidor de forma segura mediante HTTPS
+                $.ajax({
+                    url: '/iniciarSesion',
+                    method: 'POST', // Cambiado a 'POST' para mayor seguridad
+                    data: {
+                        usuario: vusuario,
+                        clave: vclave
+                    },
+                    success: function(response) {
+                        // Manejar la respuesta del servidor aquí
+                        console.log(response);
+                        if (response === 'success') {
+                            alert("Inicio de sesión exitoso.");
+                            // Redirigir al usuario a otra página una vez que haya iniciado sesión
+                            window.location.href = 'pagina-secreta.html';
+                        } else {
+                            alert("Nombre de usuario o contraseña incorrectos.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Manejar errores de la petición AJAX aquí
+                        console.error(xhr.responseText);
+                        alert("Ha ocurrido un error en el servidor.");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body style="text-align: center;">
+    <div id="tabLogin" style="width: 450px; height: 300px; margin: 0 auto;">
+        <ul>
+            <li><a href="#Tab-Login">Iniciar Sesión</a></li>
+        </ul>
+        <div id="Tab-Login">
+            <br>
+            <div style="flex-wrap: wrap; display: flex;">
+                <label style="width: 100px;">Usuario:</label>
+                <input type="text" name="" id="txtusuario">
+            </div>
+            <br>
+            <div style="flex-wrap: wrap; display: flex;">
+                <label style="width: 100px;">Clave:</label>
+                <input type="password" name="" id="txtclave">
+            </div>
+            <br>
+            <br>
+            <div style="font-size: 14px;">
+                <button id="btnIniciarSesion" type="button" class="ui-state-default" style="padding: 5px;">
+                    <span class="ui-icon ui-icon-home"></span>
+                    Iniciar Sesión
+                </button>    
+            </div>
+        </div>
+    </div>
+</body>
+</html>
